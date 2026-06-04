@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="339.09052mm"
+   height="83.617119mm"
+   viewBox="0 0 339.09052 83.617119"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   sodipodi:docname="dot-vote-wide.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.42467476"
+     inkscape:cx="389.70999"
+     inkscape:cy="-42.385377"
+     inkscape:window-width="1408"
+     inkscape:window-height="733"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="339.09052"
+       height="83.617119"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-209.99999)">
+    <path
+       id="rect1-9"
+       style="fill:#d2a7dc;fill-opacity:1;stroke-width:0.264583"
+       d="m 210,0 v 83.617117 h 83.61764 v -3.02617 A 29.134335,29.134335 0 0 1 264.48298,51.45681 29.134335,29.134335 0 0 1 293.61764,22.32267 V 0 Z m 83.61764,22.32267 V 80.590947 A 29.134335,29.134335 0 0 0 322.75177,51.45681 29.134335,29.134335 0 0 0 293.61764,22.32267 Z"
+       inkscape:export-filename="Code/dot-vote/dot-vote-ui/public/dot-vote-wide.svg"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="fill:#d2a7dc;fill-opacity:1;stroke-width:0.264583"
+       id="path1-9"
+       cx="339.14786"
+       cy="62.425171"
+       rx="17.458546"
+       ry="18.165783" />
+    <text
+       xml:space="preserve"
+       style="font-size:71.1526px;font-family:Phosphate;-inkscape-font-specification:Phosphate;writing-mode:lr-tb;direction:ltr;fill:#1c1c1c;fill-opacity:1;stroke:#1c1c1c;stroke-width:4.47113;stroke-dasharray:none;stroke-opacity:1"
+       x="380.35773"
+       y="77.359253"
+       id="text1-7"><tspan
+         sodipodi:role="line"
+         id="tspan1-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Avenue X';-inkscape-font-specification:'Avenue X';fill:#1c1c1c;fill-opacity:1;stroke:#1c1c1c;stroke-width:4.47113;stroke-dasharray:none;stroke-opacity:1"
+         x="380.35773"
+         y="77.359253">Vote</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:59.2299px;font-family:Phosphate;-inkscape-font-specification:Phosphate;writing-mode:lr-tb;direction:ltr;fill:#d2a7dc;fill-opacity:1;stroke:#d2a7dc;stroke-width:3.72192;stroke-dasharray:none;stroke-opacity:1"
+       x="346.31509"
+       y="78.989594"
+       id="text1-7-5"><tspan
+         sodipodi:role="line"
+         id="tspan1-2-8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Avenue X';-inkscape-font-specification:'Avenue X';fill:#d2a7dc;fill-opacity:1;stroke:#d2a7dc;stroke-width:3.72192;stroke-dasharray:none;stroke-opacity:1"
+         x="346.31509"
+         y="78.989594">t</tspan></text>
+  </g>
+</svg>

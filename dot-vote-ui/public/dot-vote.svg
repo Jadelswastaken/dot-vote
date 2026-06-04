@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="112.75175mm"
+   height="83.617119mm"
+   viewBox="0 0 112.75175 83.617119"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   sodipodi:docname="dot-vote.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.28415526"
+     inkscape:cx="1928.5232"
+     inkscape:cy="232.26739"
+     inkscape:window-width="1408"
+     inkscape:window-height="733"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="112.75175"
+       height="83.617119"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="rect1-5"
+       style="fill:#d2a7dc;fill-opacity:1;stroke-width:0.264583"
+       d="m 0,0 v 83.617117 h 83.61764 v -3.02617 A 29.134335,29.134335 0 0 1 54.48298,51.456807 29.134335,29.134335 0 0 1 83.61764,22.322667 V 0 Z m 83.61764,22.322667 v 58.26828 a 29.134335,29.134335 0 0 0 29.13413,-29.13414 29.134335,29.134335 0 0 0 -29.13413,-29.13414 z"
+       inkscape:export-filename="Code/dot-vote/dot-vote-ui/src/assets/dot-env.svg"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+</svg>
