@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('idea', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE,
                     related_name='votes',
-                    to='api.idea',
+                    to='board.idea',
                 )),
                 ('user', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE,

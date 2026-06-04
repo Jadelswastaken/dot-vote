@@ -15,17 +15,17 @@ class SingleVotePerUserTest(APITestCase):
         url = f'/api/ideas/{self.idea.id}/vote/'
 
         res1 = self.client.post(url)
-        self.assertEqual(res1.status_code, status.HTTP_200_OK)
+        self.assertEqual(res1.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res1.data['vote_count'], 1)
         self.assertTrue(res1.data['user_has_voted'])
 
         res2 = self.client.post(url)
-        self.assertEqual(res2.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(res2.status_code, status.HTTP_200_OK)
+        self.assertEqual(res2.data['vote_count'], 1)
+        self.assertTrue(res2.data['user_has_voted'])
 
         self.assertEqual(Vote.objects.filter(idea=self.idea, user=self.user).count(), 1)
 
-    def test_db_constraint_prevents_duplicate_vote(self):
-        Vote.objects.create(idea=self.idea, user=self.user)
         with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 Vote.objects.create(idea=self.idea, user=self.user)

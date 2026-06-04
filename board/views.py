@@ -1,5 +1,4 @@
-from django.db import IntegrityError, transaction
-from django.db.models import Count
+from django.db.models import F
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -28,12 +27,7 @@ def login(request):
         'access': str(refresh.access_token),
         'refresh': str(refresh),
         'username': user.username,
-        'is_staff': user.is_staff,
     })
-
-
-def _idea_queryset():
-    return Idea.objects.annotate(vote_count=Count('votes'))
 
 
 def _user_voted_ids(user):
@@ -42,32 +36,29 @@ def _user_voted_ids(user):
     return set()
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
-def list_ideas(request):
-    sort = request.query_params.get('sort', 'popular')
-    qs = _idea_queryset()
-    if sort == 'newest':
-        qs = qs.order_by('-created_at')
-    else:
-        qs = qs.order_by('-vote_count', '-created_at')
-    ctx = {'user_voted_ids': _user_voted_ids(request.user)}
-    return Response(IdeaSerializer(qs, many=True, context=ctx).data)
+def ideas(request):
+    if request.method == 'GET':
+        sort = request.query_params.get('sort', 'popular')
+        qs = Idea.objects.all()
+        if sort == 'newest':
+            qs = qs.order_by('-created_at')
+        else:
+            qs = qs.order_by('-vote_count', '-created_at')
+        ctx = {'user_voted_ids': _user_voted_ids(request.user)}
+        return Response(IdeaSerializer(qs, many=True, context=ctx).data)
 
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def create_idea(request):
+    if not request.user or not request.user.is_authenticated:
+        return Response({'error': 'Authentication required.'}, status=status.HTTP_401_UNAUTHORIZED)
     serializer = IdeaSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     idea = serializer.save(created_by=request.user)
-    idea.vote_count = 0
     return Response(
         IdeaSerializer(idea, context={'user_voted_ids': set()}).data,
         status=status.HTTP_201_CREATED,
     )
-
 
 
 @api_view(['POST', 'DELETE'])
@@ -79,14 +70,17 @@ def vote(request, idea_id):
         return Response({'error': 'Idea not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'POST':
-        try:
-            with transaction.atomic():
-                Vote.objects.create(idea=idea, user=request.user)
-        except IntegrityError:
-            return Response({'error': 'Already voted for this idea.'}, status=status.HTTP_409_CONFLICT)
-        return Response({'vote_count': idea.votes.count(), 'user_has_voted': True})
+        _, created = Vote.objects.get_or_create(idea=idea, user=request.user)
+        if created:
+            Idea.objects.filter(pk=idea.pk).update(vote_count=F('vote_count') + 1)
+            idea.refresh_from_db()
+        return Response(
+            {'vote_count': idea.vote_count, 'user_has_voted': True},
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
 
     deleted, _ = Vote.objects.filter(idea=idea, user=request.user).delete()
-    if not deleted:
-        return Response({'error': 'No vote to remove.'}, status=status.HTTP_404_NOT_FOUND)
-    return Response({'vote_count': idea.votes.count(), 'user_has_voted': False})
+    if deleted:
+        Idea.objects.filter(pk=idea.pk).update(vote_count=F('vote_count') - 1)
+        idea.refresh_from_db()
+    return Response({'vote_count': idea.vote_count, 'user_has_voted': False})

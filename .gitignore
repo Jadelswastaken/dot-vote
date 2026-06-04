@@ -1,6 +1,9 @@
 .env
 db.sqlite3
 env/
+.venv/
 __pycache__/
 *.pyc
 .DS_Store
+node_modules/
+.claude/

@@ -3,13 +3,13 @@ from .models import Idea
 
 
 class IdeaSerializer(serializers.ModelSerializer):
-    vote_count = serializers.IntegerField(read_only=True, default=0)
+    vote_count = serializers.IntegerField(read_only=True)
     created_by = serializers.StringRelatedField(read_only=True)
     user_has_voted = serializers.SerializerMethodField()
 
     class Meta:
         model = Idea
-        fields = ['id', 'title', 'description', 'vote_count', 'created_by', 'created_at', 'user_has_voted']
+        fields = ['id', 'title', 'description', 'vote_count', 'status', 'created_by', 'created_at', 'user_has_voted']
         read_only_fields = ['id', 'created_at', 'created_by', 'vote_count', 'user_has_voted']
 
     def validate_title(self, value):
@@ -19,6 +19,9 @@ class IdeaSerializer(serializers.ModelSerializer):
         return value
 
     def validate_description(self, value):
+        value = value.strip()
+        if not value:
+            raise serializers.ValidationError('Description is required.')
         if len(value) > 5000:
             raise serializers.ValidationError('Description must be at most 5000 characters.')
         return value

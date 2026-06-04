@@ -3,8 +3,15 @@ from django.contrib.auth.models import User
 
 
 class Idea(models.Model):
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('shipped', 'Shipped'),
+    ]
+
     title = models.CharField(max_length=255)
     description = models.TextField()
+    vote_count = models.IntegerField(default=0)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='open')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ideas')
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -1,54 +1,61 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-ink: #1c1c1cff;
   --color-plum: #d2a7dc;
   --color-dusty-blue: #5681af;
-  --color-viridian: #6b8775;
+  --color-viridian: #6b876b;
   --color-dusty-lavender: #aa8cb1;
+  --color-hopbush: #c972a0;
+  --color-clay: #C47147;
+  --color-mint: #50a085;
+  --color-terracotta: #c36955;
+  --color-mustard: #d4ae39;
+  --color-grey: #afafaf;
 
-
-  --color-primary: var(--color-ink);
-  --color-secondary: var(--color-plum);
+  --color-text: var(--color-ink);
   --color-accent: var(--color-dusty-blue);
 
   --font-display: "Segoe UI", Arial, Helvetica, sans-serif;
   --font-mono: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
-
 }
-.dark {
 
-  --color-primary: var(--color-ink);
-  --color-secondary: var(--color-plum);
-  --color-accent: var(--color-dusty-blue);
+.dark {
+  --color-text: #f5f1ea;
+  --color-grey: #3a3a4a;
 }
 
 @layer base {
   html,
   body {
-    @apply bg-primary text-secondary font-mono antialiased;
+    @apply text-text font-mono antialiased;
     scroll-behavior: smooth;
     font-feature-settings: "ss01", "cv11";
   }
 
-body {
-  margin: 0;
-  padding: 0;
+  body {
+    margin: 0;
+    padding: 0;
+    
+    width: 100%;
+    min-height: 100vh;
+    background-color: #aa8cb1;
+    background-image: linear-gradient(var(--color-grey) .1em, transparent .1em), linear-gradient(90deg, var(--color-grey) .1em, transparent .1em);
+    background-size: 3em 3em;
+    background-attachment: fixed;
+  }
 
-  width: 100%;
-  height: 100vh;
- 
-  background: #aa8cb1;
-  background-image: linear-gradient(#afafaf .1em, transparent .1em), linear-gradient(90deg, #afafaf .1em, transparent .1em);
-  background-size: 3em 3em;
+  .dark body {
+    background-color: #37203f;
+  }
 }
-}
-
 
 img {
   -webkit-user-drag: none;
   user-select: none;
-  pointer-events: none; /* optional — also blocks right-click "save image" */
+  pointer-events: none;
 }
 
 @layer utilities {
@@ -58,5 +65,13 @@ img {
   .scrollbar-hidden {
     scrollbar-width: none;
     -ms-overflow-style: none;
+  }
+  .shadow-block-static,.shadow-block-dynamic {
+    box-shadow: 4px 4px 0 0 #1c1c1c;
+    border:#1c1c1c solid 1px;
+  }
+  .shadow-block-dynamic:hover {
+    box-shadow: 6px 6px 0 0 #1c1c1c;
+    transform: translate(-2px, -2px);
   }
 }

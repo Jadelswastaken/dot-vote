@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from api.models import Idea, Vote
+from board.models import Idea, Vote
 
 USERS = [
     {'username': 'demo_user',  'password': 'demo1234'},
@@ -15,6 +15,7 @@ IDEAS = [
         'description': 'Add a dark mode toggle to the UI for better night-time usability.',
         'votes': ['demo_user', 'alice', 'bob'],
         'created_by': ['alice'],
+        'status': 'shipped',
     },
     {
         'title': 'Export to CSV',
@@ -67,10 +68,13 @@ class Command(BaseCommand):
             idea = Idea.objects.create(
                 title=data['title'],
                 description=data['description'],
+                status=data.get('status', 'open'),
                 created_by=users[data['created_by'][0]] if 'created_by' in data else users['demo_user']
             )
             for username in data['votes']:
                 Vote.objects.create(idea=idea, user=users[username])
+            idea.vote_count = len(data['votes'])
+            idea.save(update_fields=['vote_count'])
 
         self.stdout.write(self.style.SUCCESS(
             f'Seeded {Idea.objects.count()} ideas and {Vote.objects.count()} votes'
