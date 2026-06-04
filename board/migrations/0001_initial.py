@@ -1,0 +1,50 @@
+from django.conf import settings
+from django.db import migrations, models
+import django.db.models.deletion
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='Idea',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=255)),
+                ('description', models.TextField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('created_by', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='ideas',
+                    to=settings.AUTH_USER_MODEL,
+                )),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Vote',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('idea', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='votes',
+                    to='api.idea',
+                )),
+                ('user', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='votes',
+                    to=settings.AUTH_USER_MODEL,
+                )),
+            ],
+        ),
+        migrations.AddConstraint(
+            model_name='vote',
+            constraint=models.UniqueConstraint(fields=('idea', 'user'), name='unique_vote_per_user_per_idea'),
+        ),
+    ]
