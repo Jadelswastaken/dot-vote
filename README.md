@@ -1,111 +1,128 @@
-# dot-vote
+# Feature Voting Board
 
-DotVote is a lightweight feature prioritization tool built on the dot-voting project management pattern. Team members propose ideas, cast a single vote per item, and sort by popularity or recency — producing a visual consensus that helps teams align on what to build next.
-
-## Tech Stack
-
-- **Backend:** Python 3.9, Django 4.2, Django REST Framework, SimpleJWT
-- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS v4
-- **Database:** SQLite (default) or PostgreSQL
+A full-stack feature voting board built with Django + Django REST Framework (backend) and React 19 + TypeScript (frontend). Team members can sign in, propose feature ideas, and vote on the ones they support.
 
 ## Prerequisites
 
 - Python 3.9+
-- Node.js 20+
-- PostgreSQL _(optional — only if using `DB_ENGINE=postgresql`)_
+- Node.js 18+
+- pip
 
-## Local Setup
+## Backend Setup
 
-### 1. Clone the repo
-
-```bash
-git clone <repo-url>
-cd dot-vote
-```
-
-### 2. Backend
+From the project root:
 
 ```bash
 # Create and activate a virtual environment
 python3 -m venv env
-source env/bin/activate
+source env/bin/activate          # Windows: env\Scripts\activate
 
-# Install dependencies
+# Install Python dependencies
 pip install -r requirements.txt
 
-# Configure environment variables
+# Create your .env (a SECRET_KEY is required; SQLite defaults work otherwise)
 cp .env.example .env
-# Edit .env and set your SECRET_KEY (see below for generation command)
+# then set SECRET_KEY in .env to any non-empty value for local dev
 
-# Run migrations (uses SQLite by default — no database setup needed)
+# Run database migrations
 python3 manage.py migrate
 
 # Seed demo users and sample ideas
 python3 manage.py seed
 
-# Start the development server (runs on http://localhost:8000)
+# Start the Django dev server (defaults to port 8000)
 python3 manage.py runserver
 ```
 
-### 3. Frontend
+**Seeded users:**
+
+| Username    | Password   |
+| ----------- | ---------- |
+| `demo_user` | `demo1234` |
+| `team_lead` | `lead1234` |
+| `alice`     | `pass1234` |
+| `bob`       | `pass1234` |
+
+## Frontend Setup
+
+In a second terminal:
 
 ```bash
 cd dot-vote-ui
 
-# Install dependencies
+# Install Node dependencies
 npm install
 
-# Start the dev server (runs on http://localhost:5173)
+# Start the Vite dev server (http://localhost:5173)
 npm run dev
 ```
 
-The Vite dev server proxies `/api` requests to `http://localhost:8000` automatically. `django-cors-headers` is also configured as a fallback for `http://localhost:5173`.
+The Vite dev server proxies `/api/*` to `http://localhost:8000` (see `dot-vote-ui/vite.config.ts`), so the frontend and backend share an origin in development. `django-cors-headers` is also configured to allow `http://localhost:5173` as a fallback.
 
-## Seeded Users
+## Running the App
 
-The `seed` management command creates demo users and sample ideas:
+1. Start the Django server (venv active, from the project root): `python3 manage.py runserver`
+2. Start the Vite server (from `dot-vote-ui/`): `npm run dev`
+3. Open [http://localhost:5173](http://localhost:5173)
+4. Sign in with `demo_user` / `demo1234` (or any seeded user above)
 
-| Username | Password |
-|---|---|
-| `demo_user` | `demo1234` |
-| `team_lead` | `lead1234` |
-| `alice` | `pass1234` |
-| `bob` | `pass1234` |
-
-## Environment Variables
-
-Copy `.env.example` to `.env` and set the following:
-
-| Variable | Description | Default |
-|---|---|---|
-| `SECRET_KEY` | Django secret key | — (required) |
-| `DB_ENGINE` | `sqlite` or `postgresql` | `sqlite` |
-| `DB_NAME` | PostgreSQL database name | `dot_vote` |
-| `DB_USER` | PostgreSQL username | `postgres` |
-| `DB_PASSWORD` | PostgreSQL password | _(empty)_ |
-| `DB_HOST` | PostgreSQL host | `localhost` |
-| `DB_PORT` | PostgreSQL port | `5432` |
-
-> The `DB_*` variables (other than `DB_ENGINE`) are only used when `DB_ENGINE=postgresql`.
-
-Generate a secret key:
-```bash
-python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-```
-
-## API Endpoints
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/api/auth/login/` | No | Sign in, returns JWT tokens + username |
-| `GET` | `/api/ideas/?sort=popular\|newest` | No | List ideas with vote counts |
-| `POST` | `/api/ideas/` | Yes | Create a new idea |
-| `POST` | `/api/ideas/<id>/vote/` | Yes | Cast a vote |
-| `DELETE` | `/api/ideas/<id>/vote/` | Yes | Remove a vote |
+> **Fresh start:** to reset, delete `db.sqlite3`, then re-run `migrate` and `seed`.
 
 ## Running Tests
 
 ```bash
-source env/bin/activate
 python3 manage.py test board
 ```
+
+This runs the single focused test that verifies the one-vote-per-user rule.
+
+## Database
+
+SQLite is used by default — no setup required. To use **PostgreSQL**, set the following in `.env` before running migrations:
+
+```bash
+DB_ENGINE=postgresql
+DB_NAME=dot_vote
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_HOST=localhost
+DB_PORT=5432
+```
+
+(`psycopg2-binary` is already in `requirements.txt`.)
+
+## Environment Variables
+
+Configured via `.env` (loaded by `python-dotenv`). See `.env.example`.
+
+| Variable        | Default                 | Description                                    |
+| --------------- | ----------------------- | ---------------------------------------------- |
+| `SECRET_KEY`    | _(required)_            | Django secret key — must be set                |
+| `DEBUG`         | `True`                  | Set to `False` in production                   |
+| `ALLOWED_HOSTS` | `localhost,127.0.0.1`   | Comma-separated allowed hosts                  |
+| `DB_ENGINE`     | `sqlite`                | Set to `postgresql` to use Postgres            |
+| `DB_NAME` … `DB_PORT` | see above         | Postgres connection settings (when applicable) |
+
+## API Endpoints
+
+| Method   | Path                                 | Auth | Description                              |
+| -------- | ------------------------------------ | ---- | --------------------------------------- |
+| `POST`   | `/api/auth/login/`                   | No   | Sign in; returns JWT access/refresh + username |
+| `GET`    | `/api/ideas/?sort=popular\|newest`   | No   | List ideas with vote counts             |
+| `POST`   | `/api/ideas/`                        | Yes  | Create a new idea (title + description)  |
+| `POST`   | `/api/ideas/<id>/vote/`              | Yes  | Cast a vote (idempotent)                |
+| `DELETE` | `/api/ideas/<id>/vote/`             | Yes  | Remove a vote                           |
+
+## Features
+
+### Core
+
+- **Idea board:** view, create, and sort ideas by popularity or newest
+- **Voting:** cast and remove votes — one vote per user per idea, enforced at the database and application levels
+- **JWT authentication:** token-based auth; the board is publicly viewable while all write actions require sign-in. 401 responses clear the stored session client-side.
+
+### Bonus: Optimistic Voting UX
+
+Clicking vote/unvote updates the count and button state instantly, then reconciles with the authoritative server response. On failure the UI reverts to the previous state and surfaces the error inline.
+
+> **Note on scope:** the brief asks for exactly one bonus; optimistic voting is that bonus. The UI also includes a small "Shipped" status display and a light/dark theme toggle that were built alongside the design system — see SOLUTION.md for an honest note on this.

@@ -66,7 +66,7 @@ export default function IdeaCard({ idea, onVote, onUnvote, isAuthenticated, user
 
           {isAuthenticated && !idea.user_has_voted && (
             <button
-              className="bg-hopbush/80 w-6 h-6 rounded-full border-2 border-dashed border-ink text-ink p-0 cursor-pointer text-sm inline-flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+              className="hover:bg-hopbush w-6 h-6 rounded-full border-2 border-dashed border-ink text-ink p-0 cursor-pointer text-sm inline-flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-lg"
               onClick={handleToggle}
               disabled={pending}
               title="Place your dot"

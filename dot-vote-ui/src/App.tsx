@@ -21,7 +21,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header user={user} onLogout={handleLogout} onSignIn={() => setShowLogin(true)} />
-      <div className="max-w-[860px] mx-auto p-6">
+      <div className="w-full max-w-[860px] mx-auto p-6">
         <Board isAuthenticated={!!user} username={user} />
       </div>
       {showLogin && <LoginForm onLogin={handleLogin} onClose={() => setShowLogin(false)} />}

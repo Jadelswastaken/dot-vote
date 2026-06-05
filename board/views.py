@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.db.models import F
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -70,7 +71,17 @@ def vote(request, idea_id):
         return Response({'error': 'Idea not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'POST':
-        _, created = Vote.objects.get_or_create(idea=idea, user=request.user)
+        try:
+            _, created = Vote.objects.get_or_create(idea=idea, user=request.user)
+        except IntegrityError:
+            # Concurrent duplicate vote that slipped past get_or_create's check
+            # and was rejected by the DB-level UniqueConstraint. The vote already
+            # exists, so report the current state rather than 500-ing.
+            idea.refresh_from_db()
+            return Response(
+                {'vote_count': idea.vote_count, 'user_has_voted': True},
+                status=status.HTTP_409_CONFLICT,
+            )
         if created:
             Idea.objects.filter(pk=idea.pk).update(vote_count=F('vote_count') + 1)
             idea.refresh_from_db()
